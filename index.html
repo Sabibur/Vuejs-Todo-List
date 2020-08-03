@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <div id="app" class="container" >
+        <div class="row ">
+            <div class="col-md-4 m-auto" style="padding-top: 50px;">
+                <h3 class="text-center">Bajar List</h3>
+                <hr>
+                <form class="row" @submit.prevent="addItem">
+                    <input v-model="newItem" @keyup="cheak" class="form-control col-md-8 ml-3 mr-2" type="text" placeholder="Add Item" >
+                    <button type="submit" class="btn btn-primary col-md-3">Submit</button>
+                </form>
+               
+                <div class="alert alert-success mt-3" v-if="success" role="alert">
+                    Item Added Successful!
+                </div>
+
+                <div class="alert alert-warning mt-3" v-if="error" role="alert">
+                    Please Input a Item.
+                </div>
+               
+                <table class="table mt-2">
+                    <tr v-for="(item,index) in items">
+                        <th scope="row">{{ index+1 }}</th>
+                        <td >
+                            {{ item.name }}
+                        </td>
+                        <td><input v-model="item.price" class="form-control"></td>
+                        <td>
+                            <button @click="remove(index)" class="btn btn-danger btn-sm mt-1">&times;</button>
+                        </td>
+                    </tr>
+                    <tr class="font-weight-bold">
+                        <td colspan="2">Total</td>
+                        <td colspan="2">{{ total }}</td>
+                    </tr>
+                </table>
+                <!-- <ul class="list-group">
+                    <li  class="list-group-item">
+                        - {{ item.price }}
+                    </li>
+                </ul> -->
+              
+            </div>
+        </div>
+    </div>
+    
+    
+
+    
+</body>
+
+
+<script src="vue.js"></script>
+<script>
+    new Vue({
+        el: '#app',
+        data: {
+            items: [
+                { name: 'Alu', price: 10 }, 
+                { name: 'potol', price: 20 }, 
+                { name: 'morich', price: 30 }, 
+                { name: 'peyaj', price: 40 }, 
+
+            ],
+            newItem: '',
+            nameEdit: '',
+            error: false,
+            success: false,
+        },
+        methods: {
+            addItem(){
+                if (this.newItem != '') {
+                    this.items.push({
+                            
+                        name: this.newItem,
+                        price: 0.0
+                    })
+                    this.success = true,
+                    this.newItem = ''
+                }
+                else{
+                    this.error = true
+                    this.success = false
+                }
+            },
+            cheak(){
+                 if (this.newItem != '') {
+                    this.error = false
+                    this.success = false
+                 }
+            },
+            remove(index){
+                this.items.splice(index, 1);
+            },
+        },
+        computed: {
+             total() {
+                var total = 0
+                this.items.forEach(item => {
+                    total += parseFloat(item.price)
+                });
+                return total
+            }
+        }
+    })
+</script>
+
+
+</html>
